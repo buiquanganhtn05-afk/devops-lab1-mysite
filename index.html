@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartLMS - ICTU University Learning Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TOPNAV -->
+  <header class="topnav">
+    <div class="brand">
+      <div class="logo">LMS <span>v3.3.00</span></div>
+      <div class="title-wrap">
+        <h2>HỆ THỐNG QUẢN LÝ HỌC TẬP TRỰC TUYẾN</h2>
+        <span class="sub">ICTU LMS • K22.DHCQ.K1.D1.2627.KTPM K22B</span>
+      </div>
+    </div>
+    <div class="top-controls">
+      <button class="btn btn-warning" onclick="openNfrModal()">🛡️ Đặc tả NFRs (11 Phi chức năng)</button>
+      <div class="role-selector">
+        <label>Vai trò:</label>
+        <select id="roleSelect" onchange="switchRole(this.value)">
+          <option value="student">🎓 Sinh viên</option>
+          <option value="lecturer">👨‍🏫 Giảng viên</option>
+          <option value="admin">⚙️ Quản trị viên</option>
+        </select>
+      </div>
+      <div class="user-badge" id="userBadge">SV</div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">BẢNG ĐIỀU KHIỂN & CHỨC NĂNG (10)</div>
+      <nav class="menu">
+        <button class="nav-item active" onclick="showTab('tab-classes')">🏫 1. Lớp học phần (ICTU)</button>
+        <button class="nav-item" onclick="showTab('tab-account')">👤 2. Quản lý Tài khoản</button>
+        <button class="nav-item" onclick="showTab('tab-materials')">📂 3. Quản lý Học liệu</button>
+        <button class="nav-item" onclick="showTab('tab-assignments')">📝 4. Quản lý Bài tập</button>
+        <button class="nav-item" onclick="showTab('tab-exam')">⏱️ 5. Thử thách & Thi Quiz</button>
+        <button class="nav-item" onclick="showTab('tab-grades')">📊 6. Tra cứu Điểm & GPA</button>
+        <button class="nav-item" onclick="showTab('tab-forum')">💬 7. Hỏi đáp Giảng viên</button>
+        <button class="nav-item" onclick="showTab('tab-notifications')">🔔 8. Thông báo Hệ thống <span class="badge" id="notifBadge">3</span></button>
+        <button class="nav-item" onclick="showTab('tab-reports')">📈 9. Báo cáo & Thống kê</button>
+        <button class="nav-item" onclick="showTab('tab-admin')">⚙️ 10. Quản trị Hệ thống</button>
+      </nav>
+
+      <div class="system-status">
+        <div class="status-indicator"></div>
+        <div>Uptime: <strong>99.5% (NFR06)</strong><br><small>ICTU LMS Platform • Skill Test 1</small></div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- BANNER THÔNG BÁO MOBILE APP -->
+      <div class="banner">
+        <div class="banner-text">
+          <h3>Các bạn Sinh viên ICTU ơi...!</h3>
+          <p>LMS ĐÃ CÓ PHIÊN BẢN DÀNH CHO THIẾT BỊ DI ĐỘNG</p>
+          <p class="sub-text">Quét mã QR truy cập App Store hoặc CH Play để tải nào...!</p>
+        </div>
+        <div class="qr-group">
+          <div class="qr-box">
+            <div class="qr-placeholder">📱 QR iOS</div>
+            <span>iOS</span>
+          </div>
+          <div class="qr-box">
+            <div class="qr-placeholder">🤖 QR Android</div>
+            <span>Android</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label>Năm học:</label>
+          <select id="yearSelect"><option>2026-2027</option></select>
+        </div>
+        <div class="filter-group">
+          <label>Học kỳ:</label>
+          <select id="termSelect"><option>Học kỳ 1</option></select>
+        </div>
+      </div>
+
+      <!-- TAB 1: LỚP HỌC PHẦN (ICTU) -->
+      <section id="tab-classes" class="tab-pane active">
+        <div class="section-header">
+          <h3>1. Danh sách Lớp học phần (FR07 - FR11)</h3>
+          <span class="tag">Học kỳ: 2026_2027_1</span>
+        </div>
+        <div class="course-list" id="courseListContainer">
+          <!-- Render dynamically by app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 2: QUẢN LÝ TÀI KHOẢN -->
+      <section id="tab-account" class="tab-pane">
+        <div class="section-header">
+          <h3>2. Quản lý Tài khoản & Hồ sơ (FR01 - FR06)</h3>
+        </div>
+        <div class="grid-2">
+          <div class="card profile-card">
+            <div class="avatar-large" id="profileAvatar">SV</div>
+            <h3 id="profileName">Nguyễn Văn A</h3>
+            <p id="profileRoleText">Sinh viên • Lớp K22B - KTPM</p>
+            <hr>
+            <div class="info-row"><span>Mã Sinh viên / CB:</span> <strong id="profileCode">SV2026001</strong></div>
+            <div class="info-row"><span>Khoa:</span> <strong>Công nghệ Thông tin</strong></div>
+            <div class="info-row"><span>Trạng thái:</span> <span class="badge-success">Đang hoạt động</span></div>
+            
+            <div class="progress-box">
+              <label>Tiến độ hoàn thành chương trình học:</label>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 78%;"></div></div>
+              <small>78% số tín chỉ tích lũy thành công</small>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Cập nhật Thông tin Hồ sơ (FR05)</h4>
+            <form onsubmit="updateProfile(event)">
+              <div class="form-group">
+                <label>Họ và Tên:</label>
+                <input type="text" id="inputName" class="form-control" value="Nguyễn Văn A">
+              </div>
+              <div class="form-group">
+                <label>Email ICTU:</label>
+                <input type="email" id="inputEmail" class="form-control" value="nguyenvana@ictu.edu.vn">
+              </div>
+              <button type="submit" class="btn btn-primary">Lưu Hồ sơ (FR05)</button>
+            </form>
+
+            <hr>
+            <h4>Đổi Mật khẩu (FR04)</h4>
+            <div class="form-group">
+              <label>Mật khẩu hiện tại:</label>
+              <input type="password" class="form-control" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>Mật khẩu mới:</label>
+              <input type="password" class="form-control" placeholder="Mật khẩu mới (Tối thiểu 8 ký tự)">
+            </div>
+            <button onclick="alert('Đổi mật khẩu thành công (FR04)!')" class="btn btn-secondary">Đổi Mật khẩu</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: HỌC LIỆU -->
+      <section id="tab-materials" class="tab-pane">
+        <div class="section-header">
+          <h3>3. Quản lý Học liệu Tập trung (FR12 - FR16)</h3>
+        </div>
+        
+        <div class="card mb-3">
+          <div class="filter-group">
+            <label>Chọn môn học để xem tài liệu:</label>
+            <select id="materialSubjectSelect" class="form-control" onchange="renderMaterials()">
+              <!-- Dynamic options -->
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header-flex">
+            <h4>Danh sách Học liệu & Tài liệu Bài giảng</h4>
+            <button class="btn btn-primary lecturer-only" onclick="document.getElementById('uploadMaterialForm').style.display='block'">+ Tải lên Học liệu mới (FR12)</button>
+          </div>
+
+          <div id="uploadMaterialForm" class="upload-box" style="display:none;">
+            <h5>Tải lên Học liệu mới (FR12, FR16)</h5>
+            <div class="grid-2">
+              <input type="text" id="matTitle" class="form-control" placeholder="Tên tài liệu / Slide bài giảng">
+              <input type="text" id="matTopic" class="form-control" placeholder="Chủ đề / Tuần (VD: Tuần 3-4)">
+            </div>
+            <div class="form-group mt-2">
+              <input type="file" id="matFile" class="form-control">
+              <small>Hệ thống tự động kiểm tra định dạng (.pdf, .docx, .pptx) và dung lượng &lt; 25MB (FR16)</small>
+            </div>
+            <button class="btn btn-success" onclick="addMaterial()">Xác nhận Tải lên</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('uploadMaterialForm').style.display='none'">Hủy</button>
+          </div>
+
+          <table class="table mt-2">
+            <thead>
+              <tr>
+                <th>Tên Tài liệu</th>
+                <th>Tuần / Chủ đề</th>
+                <th>Kích thước</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="materialsTableBody">
+              <!-- Render dynamic materials -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 4: BÀI TẬP -->
+      <section id="tab-assignments" class="tab-pane">
+        <div class="section-header">
+          <h3>4. Quản lý Bài tập & Nộp bài (FR17 - FR22)</h3>
+        </div>
+        <div class="assignment-list" id="assignmentList">
+          <!-- Render Dynamic -->
+        </div>
+      </section>
+
+      <!-- TAB 5: THI QUIZ -->
+      <section id="tab-exam" class="tab-pane">
+        <div class="section-header">
+          <h3>5. Thử thách & Thi Trực tuyến Tự chấm (FR23 - FR29)</h3>
+          <span class="timer-badge" id="examTimer">⏱️ Thời gian còn lại: 15:00</span>
+        </div>
+
+        <div class="card exam-card">
+          <div class="exam-header">
+            <h4>Quiz Nhanh: Phương pháp luận lập trình & Kiến trúc Phần mềm</h4>
+            <p>Giảng viên: Nguyễn Lan Oanh • Thời lượng: 15 phút • Tự động chấm điểm (FR29)</p>
+          </div>
+
+          <div class="progress-bar-bg mb-3"><div class="progress-bar-fill" id="quizProgressBar" style="width: 20%;"></div></div>
+
+          <form id="quizForm" onsubmit="submitQuiz(event)">
+            <div class="question-block">
+              <p><strong>Câu 1 (FR29):</strong> Trong phương pháp thiết kế phần mềm, cách tiếp cận Top-down nghĩa là gì?[cite: 1]</p>
+              <label class="radio-option"><input type="radio" name="q1" value="A"> A. Phân rã từ hệ thống tổng thể xuống các phân hệ và mô-đun nhỏ hơn.[cite: 1]</label>
+              <label class="radio-option"><input type="radio" name="q1" value="B"> B. Lập trình từ các chức năng nhỏ trước rồi ghép lại thành hệ thống lớn.</label>
+              <label class="radio-option"><input type="radio" name="q1" value="C"> C. Thiết kế cơ sở dữ liệu trước khi thiết kế giao diện.</label>
+            </div>
+
+            <div class="question-block">
+              <p><strong>Câu 2 (NFR06):</strong> Mục tiêu tính sẵn sàng dịch vụ tối thiểu của SmartLMS theo tháng là bao nhiêu?[cite: 1]</p>
+              <label class="radio-option"><input type="radio" name="q2" value="A"> A. 99.0%</label>
+              <label class="radio-option"><input type="radio" name="q2" value="B"> B. 99.5%[cite: 1]</label>
+              <label class="radio-option"><input type="radio" name="q2" value="C"> C. 99.9%</label>
+            </div>
+
+            <div class="question-block">
+              <p><strong>Câu 3 (NFR01):</strong> Thời gian phản hồi mục tiêu cho 95% yêu cầu thông thường là bao nhiêu?[cite: 1]</p>
+              <label class="radio-option"><input type="radio" name="q3" value="A"> A. Dưới 1.5 giây[cite: 1]</label>
+              <label class="radio-option"><input type="radio" name="q3" value="B"> B. Dưới 3.0 giây</label>
+              <label class="radio-option"><input type="radio" name="q3" value="C"> C. Dưới 5.0 giây</label>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-large">Nộp bài Quiz (FR28, FR29)</button>
+          </form>
+
+          <div id="quizResult" class="result-box" style="display:none;">
+            <h4>Kết quả Bài Thi Quiz (Tự động chấm - FR29)</h4>
+            <div class="score-display" id="scoreText">0 / 10 Điểm</div>
+            <p id="quizFeedback"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: ĐIỂM SỐ & GPA -->
+      <section id="tab-grades" class="tab-pane">
+        <div class="section-header">
+          <h3>6. Tra cứu Điểm & Tính GPA Tự động (FR30 - FR34)</h3>
+        </div>
+
+        <div class="grid-3 mb-3">
+          <div class="stat-card">
+            <span>Điểm Trung bình tích lũy (GPA hệ 4):</span>
+            <strong id="gpa4Text">3.68 / 4.0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Điểm Trung bình tích lũy (GPA hệ 10):</span>
+            <strong id="gpa10Text">8.85 / 10</strong>
+          </div>
+          <div class="stat-card">
+            <span>Xếp loại Học lực:</span>
+            <strong class="text-success">Giỏi</strong>
+          </div>
+        </div>
+
+        <div class="card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Mã Lớp / Môn học</th>
+                <th>Giảng viên</th>
+                <th>Chuyên cần (10%)</th>
+                <th>Bài tập (30%)</th>
+                <th>Thi kết thúc (60%)</th>
+                <th>Điểm Tổng kết</th>
+                <th>Điểm Chữ</th>
+              </tr>
+            </thead>
+            <tbody id="gradeTableBody">
+              <!-- Render Dynamic -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 7: DIỄN ĐÀN THẢO LUẬN -->
+      <section id="tab-forum" class="tab-pane">
+        <div class="section-header">
+          <h3>7. Diễn đàn Thảo luận & Hỏi đáp Giảng viên (FR35 - FR38)</h3>
+        </div>
+
+        <div class="card mb-3">
+          <h4>Tạo chủ đề thảo luận mới (FR35)</h4>
+          <div class="form-group">
+            <input type="text" id="forumTitle" class="form-control" placeholder="Tiêu đề câu hỏi / Chủ đề cần thảo luận...">
+          </div>
+          <div class="form-group">
+            <textarea id="forumContent" class="form-control" rows="3" placeholder="Nội dung chi tiết câu hỏi gửi giảng viên..."></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="addForumTopic()">Đăng Chủ đề (FR35)</button>
+        </div>
+
+        <div id="forumTopicsContainer">
+          <!-- Render Dynamic Topics -->
+        </div>
+      </section>
+
+      <!-- TAB 8: THÔNG BÁO -->
+      <section id="tab-notifications" class="tab-pane">
+        <div class="section-header">
+          <h3>8. Thông báo Hệ thống (FR39 - FR42)</h3>
+          <button class="btn btn-secondary" onclick="markAllNotificationsRead()">Đánh dấu đã đọc tất cả (FR41)</button>
+        </div>
+        <div class="card">
+          <div class="notif-list" id="notifContainer">
+            <!-- Render Dynamic Notifications -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 9: BÁO CÁO THỐNG KÊ -->
+      <section id="tab-reports" class="tab-pane">
+        <div class="section-header">
+          <h3>9. Báo cáo & Thống kê Tiến độ (FR43 - FR44)</h3>
+        </div>
+        
+        <div class="grid-2 mb-3">
+          <div class="card">
+            <h4>Tỉ lệ Nộp bài tập đúng hạn (FR43)</h4>
+            <div class="chart-mock">
+              <div class="bar-group">
+                <div class="bar" style="height: 90%;"><span>90%</span></div>
+                <label>Đúng hạn</label>
+              </div>
+              <div class="bar-group">
+                <div class="bar warning" style="height: 8%;"><span>8%</span></div>
+                <label>Nộp muộn</label>
+              </div>
+              <div class="bar-group">
+                <div class="bar danger" style="height: 2%;"><span>2%</span></div>
+                <label>Chưa nộp</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h4>Phổ điểm môn Kiến trúc & Thiết kế phần mềm</h4>
+            <div class="chart-mock">
+              <div class="bar-group">
+                <div class="bar" style="height: 40%;"><span>40%</span></div>
+                <label>Điểm A/A+</label>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height: 45%;"><span>45%</span></div>
+                <label>Điểm B/B+</label>
+              </div>
+              <div class="bar-group">
+                <div class="bar warning" style="height: 15%;"><span>15%</span></div>
+                <label>Điểm C/D</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 10: QUẢN TRỊ HỆ THỐNG -->
+      <section id="tab-admin" class="tab-pane">
+        <div class="section-header">
+          <h3>10. Quản trị Hệ thống & Nhật ký Audit (FR45 - FR46)</h3>
+        </div>
+
+        <div class="grid-2 mb-3">
+          <div class="card">
+            <h4>Cấu hình Tham số Vận hành (FR46)</h4>
+            <div class="form-group">
+              <label>Dung lượng tệp tải lên tối đa (MB):</label>
+              <input type="number" class="form-control" value="25">
+            </div>
+            <div class="form-group">
+              <label>Thời gian khóa tài khoản sau khi nhập sai pass (Phút):</label>
+              <input type="number" class="form-control" value="15">
+            </div>
+            <button class="btn btn-primary" onclick="alert('Lưu cấu hình hệ thống thành công (FR46)!')">Lưu Cấu hình</button>
+          </div>
+
+          <div class="card">
+            <h4>Trạng thái Hệ thống & Hạ tầng (NFR03)</h4>
+            <div class="info-row"><span>Tải CPU Hiện tại:</span> <strong>14.2%</strong></div>
+            <div class="info-row"><span>Sử dụng RAM:</span> <strong>4.8 GB / 16 GB</strong></div>
+            <div class="info-row"><span>Người dùng đồng thời (Active Sessions):</span> <strong>1,240 / 3,000 (NFR03)</strong>[cite: 1]</div>
+            <div class="info-row"><span>Kết nối Cơ sở dữ liệu:</span> <span class="badge-success">Ổn định (Latency 4ms)</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Nhật ký Hoạt động Quan trọng - Audit Log (FR45, NFR13)[cite: 1]</h4>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Thời gian</th>
+                <th>Người thực hiện</th>
+                <th>Hành động</th>
+                <th>Phân hệ</th>
+                <th>Địa chỉ IP</th>
+              </tr>
+            </thead>
+            <tbody id="auditLogBody">
+              <!-- Render Dynamic Audit Logs -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL ĐẶC TẢ PHI CHỨC NĂNG (NFRs & QAS) -->
+  <div id="nfrModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🛡️ Đặc tả 11 Yêu cầu Phi Chức năng & Chỉ tiêu Định lượng (NFR01 - NFR14)</h3>
+        <button class="close-btn" onclick="closeNfrModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Bảng tổng hợp chỉ tiêu đo lường chất lượng hệ thống SmartLMS theo báo cáo đặc tả kiến trúc:[cite: 1]</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mã NFR</th>
+              <th>Thuộc tính</th>
+              <th>Chỉ tiêu định lượng (Target Metric)[cite: 1]</th>
+              <th>Phương pháp kiểm chứng[cite: 1]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>NFR01</strong></td>
+              <td>Hiệu năng[cite: 1]</td>
+              <td>95% yêu cầu thông thường phản hồi &lt; 1,5 giây khi tải mục tiêu.[cite: 1]</td>
+              <td>Load test công cụ JMeter/k6; đo p95.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR02</strong></td>
+              <td>Hiệu năng[cite: 1]</td>
+              <td>95% yêu cầu xem danh sách lớp và xem điểm phản hồi &lt; 2,0 giây.[cite: 1]</td>
+              <td>Kiểm thử API và UI giao diện.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR03</strong></td>
+              <td>Khả năng mở rộng[cite: 1]</td>
+              <td>Hỗ trợ 3.000 người dùng đồng thời cao điểm ban đầu.[cite: 1]</td>
+              <td>Stress test, giám sát CPU, RAM, DB.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR04</strong></td>
+              <td>Khả năng mở rộng[cite: 1]</td>
+              <td>Mở rộng quy mô từ 2.000 đến 30.000 sinh viên không cần tái thiết kế.[cite: 1]</td>
+              <td>Đánh giá kiến trúc phân lớp.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR06</strong></td>
+              <td>Tính sẵn sàng[cite: 1]</td>
+              <td>Uptime sẵn sàng tối thiểu 99,5% / tháng (tối đa gián đoạn 3h36m).[cite: 1]</td>
+              <td>Báo cáo uptime tự động.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR07</strong></td>
+              <td>Khôi phục (RTO)[cite: 1]</td>
+              <td>Thời gian khôi phục dịch vụ mục tiêu (RTO) &lt; 30 phút.[cite: 1]</td>
+              <td>Diễn tập khôi phục sau sự cố.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR08</strong></td>
+              <td>Mất dữ liệu (RPO)[cite: 1]</td>
+              <td>Mức mất dữ liệu tối đa mục tiêu (RPO) &lt; 5 phút.[cite: 1]</td>
+              <td>Kiểm tra lịch sao lưu DB log.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR11</strong></td>
+              <td>Bảo mật[cite: 1]</td>
+              <td>100% API nghiệp vụ cần xác thực và phân quyền Role-based.[cite: 1]</td>
+              <td>Review mã nguồn & Security Audit.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR12</strong></td>
+              <td>Bảo mật[cite: 1]</td>
+              <td>100% kết nối truyền tải dữ liệu bắt buộc mã hóa HTTPS/TLS.[cite: 1]</td>
+              <td>Kiểm tra SSL Certificate.[cite: 1]</td>
+            </tr>
+            <tr>
+              <td><strong>NFR13</strong></td>
+              <td>Bảo mật[cite: 1]</td>
+              <td>100% thao tác sửa đổi điểm số phải lưu vết nhật ký Audit Log.[cite: 1]</td>
+              <td>Kiểm tra bảng lịch sử điểm.[cite: 1]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
